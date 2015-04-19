@@ -1,0 +1,15 @@
+{
+  "name": "TichuScoreApp_NodeExpress",
+  "version": "0.0.0",
+  "description": "TichuScoreApp_NodeExpress",
+  "main": "app.js",
+  "author": {
+    "name": "Ryan",
+    "email": ""
+  },
+  "dependencies": {
+    "express": "3.4.4",
+    "jade": "*",
+    "stylus": "*"
+  }
+}
