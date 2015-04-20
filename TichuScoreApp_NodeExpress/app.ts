@@ -3,6 +3,8 @@ import routes = require('./routes/index');
 import user = require('./routes/user');
 import http = require('http');
 import path = require('path');
+var socketIO = require('socket.io');
+
 
 var app = express();
 
@@ -29,6 +31,18 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function () {
+var server = http.createServer(app);
+server.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
+});
+
+
+var socketIO = require('socket.io')(server);
+socketIO.on('connection', function (socket) {
+    console.log("Socket Connection Started\n");
+    socket.on('addThem', function (data) {
+        console.log("Attempting addition");
+        var total = parseInt(data.A) + parseInt(data.B);
+        socket.emit("result", { sum: total, A:data.A, B:data.B });
+    });
 });

@@ -3,5 +3,14 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="/socket.io/socket.io.js")
+    script.
+        var socket = io();
+        socket.on('result', function (data) {
+            document.getElementById("sum").innerHTML += data.A + "&nbsp;+&nbsp;" + data.B + "&nbsp;=&nbsp;" + data.sum + "<br>";
+        });
+        function addThem(){
+            socket.emit('addThem', {A:document.getElementById("A").value, B:document.getElementById("B").value});
+        }
   body
     block content
