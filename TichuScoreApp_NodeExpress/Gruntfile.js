@@ -42,9 +42,12 @@ module.exports = function (grunt) {
     
     function mvJsFiles() {
         var i = 0;
-        var files = grunt.file.expand({matchBase:true},['*.js', '!node_modules/**']);
+        var files = grunt.file.expand({matchBase:true},['*.js','*.json','*.md','*.jade', 'public/**', '!node_modules/**']);
         for (i = 0; i < files.length; i++) {
-            grunt.log.writeln("File: " + files[i]);
+            if (grunt.file.isFile(files[i])) {
+                grunt.log.writeln("Copying File: " + files[i]);
+                grunt.file.copy(files[i], 'bin/Deploy/' + files[i]);
+            }
         }
     }
 };
