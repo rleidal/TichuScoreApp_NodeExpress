@@ -3,10 +3,34 @@
 block content
   h1= title
   p Welcome to #{title}
+
+  div(ng-app="" ng-controller="tichuScoreClientController").
+    <div id="teamHeader">
+        <div ng-repeat="team in teams" class="teamDisplay">
+            <div class="playerContainer">
+                <div class="playerName">{{team.nameL}}</div>
+                <div class="playerName">{{team.nameR}}</div>
+            </div>
+            <div class="teamScore">{{team.score}}</div>
+            <div ng-repeat="hand in team.hands" class="teamHand">
+                <div class="tichuStatus">{{hand.tichuL}}</div>
+                <div class="handScore">{{hand.totalPts}}</div>
+                <div class="tichuStatus">{{hand.tichuR}}</div>
+            </div>
+       </div>
+    </div>
+    <input type="button" value="Swap Team Sides" ng-click="events.swap()">
+
+
+  hr
+  h2 WebSocketTest, Add Some Numbers:
   input(type='number', id="A")
   input(type='number', id="B")
   button(type="button" onclick="addThem()").
     +Add Them+
   hr
+  h2 Results:
   div(id='sum').
   hr
+  h2 Message Log
+  div(id='log')

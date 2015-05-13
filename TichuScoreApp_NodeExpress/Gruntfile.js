@@ -42,7 +42,7 @@ module.exports = function (grunt) {
     
     function mvJsFiles() {
         var i = 0;
-        var files = grunt.file.expand({matchBase:true},['*.js','*.json','*.md','*.jade', 'public/**', '!node_modules/**']);
+        var files = grunt.file.expand({matchBase:true},['*.js','*.json','*.md','*.jade', 'public/**', '!node_modules/**', '!*.ts']);
         for (i = 0; i < files.length; i++) {
             if (grunt.file.isFile(files[i])) {
                 grunt.log.writeln("Copying File: " + files[i]);
