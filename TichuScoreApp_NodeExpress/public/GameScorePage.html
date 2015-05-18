@@ -1,0 +1,37 @@
+﻿<div id="tichuTop">
+    <div id="teamHeader">
+        <div id="scoreKeeper">
+            <input type="button" class="scoreButton" value="Score It" ng-click="events.go()" />
+            <div class="flexWrapper">
+                <div class="flexWrapper teamDisplay">
+                    <input type="tel" class="tichuStatusEntry" ng-model="teams[0].handIn.tichuL" />
+                    <input type="number" class="teamScoreEntry" ng-model="teams[0].handIn.cardPts" ng-blur="events.updatePts(0)" />
+                    <input type="tel" class="tichuStatusEntry" ng-model="teams[0].handIn.tichuR" />
+                </div>
+                <div class="flexWrapper teamDisplay">
+                    <input type="tel" class="tichuStatusEntry" ng-model="teams[1].handIn.tichuL" />
+                    <input type="number" class="teamScoreEntry" ng-model="teams[1].handIn.cardPts" ng-blur="events.updatePts(1)" />
+                    <input type="tel" class="tichuStatusEntry" ng-model="teams[1].handIn.tichuR" />
+                </div>
+            </div>
+        </div>
+        <div class=flexWrapper>
+            <div ng-repeat="team in teams" class="teamDisplay">
+                <div class="flexWrapper">
+                    <div class="playerName ng-binding">{{team.nameL}}</div>
+                    <div class="playerName ng-binding">{{team.nameR}}</div>
+                </div>
+                <div class="teamScore ng-binding">{{team.score}}</div>
+                <div ng-repeat="hand in team.hands" class="teamHand">
+                    <div class="tichuStatus">{{hand.tichuL}}</div>
+                    <div class="handScore">{{hand.totalPts}}</div>
+                    <div class="tichuStatus">{{hand.tichuR}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flexWrapper">
+        <input type="button" value="Swap" ng-click="events.swap()" />
+        <input type="button" value="Init Score" ng-click="events.init_sample()" />
+    </div>
+</div>

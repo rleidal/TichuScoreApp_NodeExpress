@@ -34,7 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="public\javascripts\tichuClient.ts" />
+    <TypeScriptCompile Include="public\javascripts\TichuClientService.ts" />
+    <TypeScriptCompile Include="public\javascripts\tichuGameListClientController.ts" />
+    <TypeScriptCompile Include="public\javascripts\tichuScoreClientController.ts" />
+    <TypeScriptCompile Include="public\javascripts\tichuClientApp.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\login.ts" />
     <TypeScriptCompile Include="routes\user.ts" />
@@ -54,6 +57,8 @@
     <TypeScriptCompile Include="Scripts\typings\socket.io\socket.io.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\stylus\stylus.d.ts" />
     <Content Include="package.json" />
+    <Content Include="public\GameScorePage.html" />
+    <Content Include="public\GameSelectPage.html" />
     <Content Include="public\stylesheets\style.styl" />
     <Content Include="README.md" />
     <Content Include="tsd.json" />
