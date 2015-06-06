@@ -6,6 +6,7 @@ import path = require('path');
 //import socketIO = require('socket.io')(server);
 
 
+
 var app = express();
 
 // all environments
@@ -37,16 +38,20 @@ server.listen(app.get('port'), function () {
 });
 
 
-var socketIO = require('socket.io')(server);
-socketIO.on('connection', function (socket) {
+var socketIO: SocketIO.Server = require('socket.io')(server);
+
+import gameManager = require('./routes/gameManager');
+var gm = new gameManager(socketIO);
+
+
+socketIO.on('connection', function (socket: SocketIO.Socket) {
     console.log("Socket Connection Started\n");
     socket.on('addThem', function (data) {
-        if (!socket.hasOwnProperty('counter')) {
-            socket.counter = 0;
-        }
-        console.log("Attempting addition - count="+socket.counter);
-        socket.counter++;
         var total = parseInt(data.A) + parseInt(data.B);
+        console.log("Attempting addition");
         socket.emit("result", { sum: total, A:data.A, B:data.B });
     });
+
+    socket.on('enterGame', gm.enterGame.bind(gm, socket));
 });
+

@@ -3,7 +3,7 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         // read in the project settings from the package.json file into the pkg property
-        pkg: grunt.file.readJSON('package.json')
+        pkg: grunt.file.readJSON('package.json'),
 
         // define configuration for each of the tasks we have
         // this is a sample jshint task config
@@ -22,10 +22,22 @@ module.exports = function (grunt) {
                         }
                     }
         */
+        //copy: {
+        //    stash_node: {
+        //        cwd: '.',
+        //        src: ['node_modules/**/*'],
+        //        dest: '../',
+        //        expand:true,
+        //    },
+        //    restore_node: {
+        //        files: [],
+        //    },
+        //},
     });
 
     // Add all plugins that your project needs here
-//    grunt.loadNpmTasks('');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    
 
     // this would be run by typing "grunt test" on the command line
     // the array should contains the names of the tasks to run
@@ -34,8 +46,8 @@ module.exports = function (grunt) {
     // define the default task that can be run just by typing "grunt" on the command line
     // the array should contains the names of the tasks to run
     grunt.registerTask('default', []);
-
-    grunt.registerTask('buildDeploy', 'Sample tast that finds all the js files', function () {
+    
+    grunt.registerTask('buildDeploy', 'Sample task that finds all the js files', function () {
         mvJsFiles();
     });
 
@@ -50,5 +62,6 @@ module.exports = function (grunt) {
             }
         }
     }
+    
 };
 

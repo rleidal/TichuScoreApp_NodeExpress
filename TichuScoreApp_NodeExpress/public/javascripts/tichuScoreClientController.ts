@@ -59,8 +59,27 @@
         events: tichuScoreClientController;
     }
 
+    interface tichuScoreSheetView2 extends ng.IScope {
+        model: tichuClientScoreModel;
+        events: tichuScoreClientController2;
+    }
 
+    interface tichuScoreRouteParams extends ng.route.IRouteParamsService {
+        gameID: number;
+    }
 
+    export class tichuScoreClientController2 {
+        static $inject = ['$scope', '$routeParams', 'tichuClientService'];
+        view: tichuScoreSheetView2;
+        constructor($scope: tichuScoreSheetView2, $routeParams: tichuScoreRouteParams, service: tichuClientService) { //TODO: should I specify routeParam better?
+
+            this.view = $scope;
+            this.view.events = this;
+            this.view.model = service.scoreModel;
+
+            this.view.model.gameID = $routeParams.gameID;
+        }
+   }
 
     export class tichuScoreClientController {
         view: tichuScoreSheetView;
