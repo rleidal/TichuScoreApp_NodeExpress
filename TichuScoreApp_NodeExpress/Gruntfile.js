@@ -5,39 +5,39 @@ module.exports = function (grunt) {
         // read in the project settings from the package.json file into the pkg property
         pkg: grunt.file.readJSON('package.json'),
 
-        // define configuration for each of the tasks we have
-        // this is a sample jshint task config
-        /*
-            jshint: {
-                    // define the files to lint
-                    files: ['gruntfile.js', 'src/*.js', '/*.js'],
-                    // configure JSHint (documented at http://www.jshint.com/docs/)
-                    options: {
-                    // more options here if you want to override JSHint defaults
-                    globals: {
-                            jQuery: true,
-                            console: true,
-                            module: true
-                            }
-                        }
-                    }
-        */
-        //copy: {
-        //    stash_node: {
-        //        cwd: '.',
-        //        src: ['node_modules/**/*'],
-        //        dest: '../',
-        //        expand:true,
-        //    },
-        //    restore_node: {
-        //        files: [],
-        //    },
-        //},
-    });
+        githooks: {
+            all: {
+                'pre-commit': 'stashNode',
+                'post-commit': 'restoreNode',
+            }
+        },
+        exec: {
+            stashNode: {cmd: genstash },//'move ./node_modules/googleapis ./node_modules/socketio-jwt ../;',
+            restoreNode: { cmd: genrestore }, //'move ../googleapis ./node_modules',
+        },
 
-    // Add all plugins that your project needs here
-    grunt.loadNpmTasks('grunt-contrib-copy');
+    });
     
+    var problem_nodes = ['googleapis', 'socketio-jwt', 'tsd'];
+    function genstash() {
+        var cmd = '';
+        problem_nodes.forEach(function (p) {
+            cmd += 'move ./node_modules/' + p + " ../ &";
+        });
+        return cmd;
+    }
+    
+    function genrestore() {
+        var cmd = '';
+        problem_nodes.forEach(function (p) {
+            cmd += 'move ../' + p + " ./node_modules &";
+        });
+        return cmd;
+    }
+    
+    // Add all plugins that your project needs here
+    grunt.loadNpmTasks('grunt-githooks');
+    grunt.loadNpmTasks('grunt-exec');
 
     // this would be run by typing "grunt test" on the command line
     // the array should contains the names of the tasks to run
@@ -52,6 +52,10 @@ module.exports = function (grunt) {
     });
 
     
+    //    grunt.registerTask('stashNode', 'Stash the node_module directory for commit purposes', function () { stashNode(); });
+    //    grunt.registerTask('restoreNode', 'Restore the node_module directory for commit purposes', function () { restoreNode(); });
+    
+
     function mvJsFiles() {
         var i = 0;
         var files = grunt.file.expand({matchBase:true},['*.js','*.json','*.md','*.jade', 'public/**', '!node_modules/**', '!*.ts']);
@@ -62,6 +66,6 @@ module.exports = function (grunt) {
             }
         }
     }
-    
+   
 };
 
