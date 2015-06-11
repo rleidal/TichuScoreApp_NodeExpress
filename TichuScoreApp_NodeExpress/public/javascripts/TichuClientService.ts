@@ -8,7 +8,7 @@
     export class tichuClientService {
         //$rootScope: ng.IRootScopeService;
         $timeout: ng.ITimeoutService;
-        socket: ClientSocket;
+        socket: SocketIO.ClientSocket;
         scoreModel: tichuClientScoreModel;
         cnt: number;
         sum: number;

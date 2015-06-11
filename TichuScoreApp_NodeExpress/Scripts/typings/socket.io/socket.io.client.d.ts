@@ -6,9 +6,11 @@
 ///<reference path='../node/node.d.ts' />
 
 declare var io : {
-    connect(url?: string): ClientSocket;
+    connect(url?: string): SocketIO.ClientSocket;
 }
-interface ClientSocket {
-    on(event: string, callback: (data: any) => void );
-    emit(event: string, ...args: any[]);
+declare module SocketIO {
+    interface ClientSocket {
+        on(event: string, callback: (data: any) => void);
+        emit(event: string, ...args: any[]);
+    }
 }

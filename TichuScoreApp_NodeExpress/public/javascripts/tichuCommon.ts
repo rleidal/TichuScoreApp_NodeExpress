@@ -2,7 +2,20 @@
     'use strict';
 
     export class player {
-        constructor(public name:string, public ID: number) {
+        name: string;
+        ID: number;
+
+        constructor(name: string, ID: number);
+        constructor(p_int: tichuInterfaces.player_intf);
+        constructor(nameOrIntf: string|tichuInterfaces.player_intf, ID?: number) {
+            if (typeof nameOrIntf === 'string') {
+                this.name = nameOrIntf;
+                this.ID = ID;
+            } else {
+                //player_intf mode
+                this.name = nameOrIntf.name;
+                this.ID = nameOrIntf.ID;
+            }
         }
     }
 
@@ -36,8 +49,17 @@
 
     export class team {
         players: player[];
-        constructor(public ID: number) {
-            this.players = [];
+        ID: number;
+        constructor(ID: number);
+        constructor(t_intf: tichuInterfaces.team_intf);
+        constructor(idOrIntf: number | tichuInterfaces.team_intf) {
+            if (typeof idOrIntf === 'number') {
+                this.players = [];
+                this.ID = idOrIntf
+            } else {
+                this.players = idOrIntf.players;
+                this.ID = idOrIntf.ID;
+            }
         }
     }
     export class teamHand {
@@ -61,8 +83,10 @@
         score: number;
         handScores: teamHand[];
         playerGambles: gamble[][];
-        constructor(ID: number) {
-            super(ID);
+        constructor(ID: number);
+        constructor(t_intf: tichuInterfaces.team_intf);
+        constructor(idOrIntf: number | tichuInterfaces.team_intf) {
+            super(idOrIntf);
             this.score = 0;
             this.handScores = [];
             this.playerGambles = [[]];

@@ -12,7 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>22629d2a-68cc-4b8a-9eb5-dfb7fbfe397e</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.ts</StartupFile>
+    <StartupFile>tichuServer.ts</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -33,7 +33,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="tichuServer.ts" />
+    <TypeScriptCompile Include="common\tichuCommunications.ts" />
+    <TypeScriptCompile Include="common\tichuInterfaces.ts" />
     <TypeScriptCompile Include="public\javascripts\tichuClientScoreModel.ts" />
     <TypeScriptCompile Include="public\javascripts\TichuClientService.ts" />
     <TypeScriptCompile Include="public\javascripts\tichuCommon.ts" />
@@ -73,6 +75,7 @@
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
+    <Folder Include="common\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
     <Folder Include="Scripts\" />

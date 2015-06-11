@@ -6,6 +6,72 @@ interface enterGameReq {
     prevGameID?: number;
 }
 
+class gameManager {
+    private cache: { [gameID: number]: tichuClient.tichuScoreModel };
+    private socket_server: SocketIO.Server;
+
+    constructor(ss: SocketIO.Server) {
+        console.log("Creating a GameManager");
+        this.socket_server = ss;
+        initTestGames();
+        this.cache = {};
+        this.cache[1] = testGame1;
+        this.cache[2] = testGame2;
+    }
+
+    enterGame(socket: SocketIO.Socket, req: enterGameReq, callback: tichuCommunications.s2cNewGameResponse_func ) {
+        if (req.prevGameID != -1) {
+//            console.log("Leaving game " + req.prevGameID);
+            socket.leave(gameManager.genRoomStr(req.prevGameID));
+            //TODO: remove empty games from cache
+        }
+//        console.log("Entering game " + req.gameID);
+        socket.join(gameManager.genRoomStr(req.gameID));
+        var gameUpdate: tichuCommon.gameUpdate;
+        var game: tichuClient.tichuScoreModel;
+
+        //TODO: fix this to check that the cache has the game
+//        console.log("Building gameUpdate");
+        gameUpdate = new tichuCommon.gameUpdate();
+        game = this.cache[req.gameID];
+        gameUpdate.gameID = req.gameID;
+        gameUpdate.handList = [];
+
+        var gameInfo: tichuInterfaces.gameInfo_intf = { game_ID: req.gameID, teams: [], currentScore:{}};
+        var teamInfo = [];
+
+
+        game.teamsInGame.forEach(team => {
+//            console.log("foreach team: " + team.ID + '  ' + team.score);
+            gameUpdate.currentScore[team.ID] = team.score;
+            teamInfo.push({ ID: team.ID, players: team.players });
+            team.handScores.forEach((hand, index) => {
+//                console.log("foreach hand: " + index);
+                if (gameUpdate.handList[index] === undefined) gameUpdate.handList[index] = new tichuCommon.hand();
+                gameUpdate.handList[index].ID = index;
+                gameUpdate.handList[index].teamHands[team.ID] = new tichuCommon.teamHand();
+                gameUpdate.handList[index].teamHands[team.ID].runningTotal = hand.runningTotal;
+                gameUpdate.handList[index].teamHands[team.ID].totalPts = hand.totalPts;
+//                console.log("Points: " + hand.totalPts );
+            });
+        });
+
+
+//        console.log("Sending gameUpdate");
+        gameInfo.teams = teamInfo;
+        gameInfo.currentScore = gameUpdate.currentScore;
+
+        callback(gameInfo);
+        socket.emit("updateGame", gameUpdate ); //TODO: generate game object
+    }
+
+    static genRoomStr(id: number): string {
+        var room: string = "GameRoom_" + id;
+//        console.log("Generated room: " + room);
+        return room;
+    }
+};
+
 var testGame1: tichuClient.tichuScoreModel;
 var testGame2: tichuClient.tichuScoreModel;
 
@@ -86,65 +152,6 @@ function initTestGames() {
 
 }
 
-class gameManager {
-    private cache: { [gameID: number]: tichuClient.tichuScoreModel };
-    private socket_server: SocketIO.Server;
 
-    constructor(ss: SocketIO.Server) {
-        console.log("Creating a GameManager");
-        this.socket_server = ss;
-        initTestGames();
-        this.cache = {};
-        this.cache[1] = testGame1;
-        this.cache[2] = testGame2;
-    }
-
-    enterGame(socket: SocketIO.Socket, req: enterGameReq, callback: (data:any)=>void ) {
-        if (req.prevGameID != -1) {
-            console.log("Leaving game " + req.prevGameID);
-            socket.leave(gameManager.genRoomStr(req.prevGameID));
-            //TODO: remove empty games from cache
-        }
-        console.log("Entering game " + req.gameID);
-        socket.join(gameManager.genRoomStr(req.gameID));
-        var gameUpdate: tichuCommon.gameUpdate;
-        var game: tichuClient.tichuScoreModel;
-
-        //TODO: fix this to check that the cache has the game
-        console.log("Building gameUpdate");
-        gameUpdate = new tichuCommon.gameUpdate();
-        game = this.cache[req.gameID];
-        gameUpdate.gameID = req.gameID;
-        gameUpdate.handList = [];
-
-        var teamInfo = [];
-
-
-        game.teamsInGame.forEach(team => {
-            console.log("foreach team: " + team.ID + '  ' + team.score);
-            gameUpdate.currentScore[team.ID] = team.score;
-            teamInfo.push({ ID: team.ID, players: team.players });
-            team.handScores.forEach((hand, index) => {
-                console.log("foreach hand: " + index);
-                if (gameUpdate.handList[index] === undefined) gameUpdate.handList[index] = new tichuCommon.hand();
-                gameUpdate.handList[index].ID = index;
-                gameUpdate.handList[index].teamHands[team.ID] = new tichuCommon.teamHand();
-                gameUpdate.handList[index].teamHands[team.ID].runningTotal = hand.runningTotal;
-                gameUpdate.handList[index].teamHands[team.ID].totalPts = hand.totalPts;
-            });
-        });
-
-
-        console.log("Sending gameUpdate");
-        callback(teamInfo);
-        socket.emit("updateGame", gameUpdate ); //TODO: generate game object
-    }
-
-    static genRoomStr(id: number): string {
-        var room: string = "GameRoom_" + id;
-        console.log("Generated room: " + room);
-        return room;
-    }
-};
 
 export = gameManager;

@@ -22,7 +22,7 @@
                     <div class="playerName ng-binding">{{team.players[1].name}}</div>
                 </div>
                 <div class="teamScore ng-binding">{{team.score}}</div>
-                <div ng-repeat="hand in team.handScores | orderBy:predicate:reverse track by $index" class="teamHand">
+                <div ng-repeat="hand in team.handScores.slice().reverse()" class="teamHand">
                     <div class="tichuStatus">{{team.playerGambles[0][$index].name}}</div>
                     <div class="handScore">{{hand.totalPts}}</div>
                     <div class="tichuStatus">{{team.playerGambles[1][$index].name}}</div>
