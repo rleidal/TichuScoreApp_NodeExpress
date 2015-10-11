@@ -33,6 +33,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="routes\serverSocket.ts" />
     <TypeScriptCompile Include="tichuServer.ts" />
     <TypeScriptCompile Include="common\tichuCommunications.ts" />
     <TypeScriptCompile Include="common\tichuInterfaces.ts" />
